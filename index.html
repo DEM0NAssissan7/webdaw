@@ -125,10 +125,10 @@
         .playhead {
             position: absolute;
             top: 20px; /* Below the ruler */
-            left: calc(var(--track-info-width) + 21px);
+            left: var(--track-info-width);
             width: 2px;
             height: calc(100% - 20px);
-            background-color: white;
+            background-color: red;
             pointer-events: none;
         }
 
@@ -139,6 +139,25 @@
             background-color: #252525;
             overflow-x: scroll;
             position: relative;
+        }
+
+        .timeline-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(100% - var(--track-info-width));
+            height: 100%;
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent calc(25% - 1px),
+                rgba(255, 255, 255, 0.1) calc(25% - 1px),
+                rgba(255, 255, 255, 0.1) 25%
+            );
+            z-index: 0;
+            pointer-events: none;
+            transform: translateX(var(--track-info-width));
         }
 
         .sample-browser {
@@ -205,6 +224,7 @@
             align-items: center;
             padding: 5px;
             background-color: #252525;
+            z-index: 1; /* Ensures clips are above the markers */
         }
 
         .placeholder {
@@ -280,6 +300,7 @@
                     <div class="beat">3<div class="quarter"></div></div>
                     <div class="beat">4<div class="quarter"></div></div>
                 </div>
+                <div class="playhead"></div>
 
                 <div class="timeline-container">
                     <div class="track">
@@ -327,8 +348,6 @@
                     <!-- Placeholder for new tracks -->
                     <div class="placeholder">Drag clips here to import them</div>
                 </div>
-                <div class="playhead"></div>
-                
             </div>
 
             <!-- Sample Browser -->
