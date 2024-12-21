@@ -1,0 +1,11 @@
+.sequencer {
+    overflow: hidden;
+    background-color: gray;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex: 1 0 0;
+    position: relative;
+    height: 100%
+}

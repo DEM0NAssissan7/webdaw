@@ -1,13 +1,19 @@
 # Webdaw
 An in-browser DAW designed around sampling and simplicity while also being very functional for production use.
 
+# Characteristics
+- Plugins and instruments are treated as the same thing
+- 
 
 # TODO
 - [ ] Audio Engine
 - [ ] Sequencer
+- [ ] Tracks
+  - [ ] Mute, solo, arm-record
 - [ ] Region Auto-adjustment (most important)
   - [ ] Time-stretching based on tempo
   - [ ] Pitching based on key
+- [ ] Audio Routing Grid
 - [ ] Automatic sample tempo & pitch detection
 - [ ] MIDI Editor
 - [ ] MIDI Keyboard (external and with on-board keyboard)

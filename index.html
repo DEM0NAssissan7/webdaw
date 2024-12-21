@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebDAW</title>
+    <style>
+        :root {
+            --track-info-width: 250px; /* Size of the track info area */
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .daw-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        .menu-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            background-color: #2c2c2c;
+            padding: 0 20px;
+        }
+
+        .menu-bar button {
+            background: none;
+            color: #ffffff;
+            border: none;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .menu-bar button:hover {
+            color: #00bcd4;
+        }
+
+        .menu-bar .branding {
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .transport-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            background-color: #333333;
+            border-top: 1px solid #444;
+            padding: 0 20px;
+        }
+
+        .transport-bar button {
+            background: none;
+            color: #ffffff;
+            border: none;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .transport-bar button:hover {
+            color: #00bcd4;
+        }
+
+        .volume-slider {
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+        }
+
+        .volume-slider input {
+            margin-left: 10px;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .region-editor-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ruler {
+            height: 20px;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #444;
+            padding-left: var(--track-info-width);
+        }
+
+        .ruler .beat {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .ruler .quarter {
+            position: absolute;
+            top: 0;
+            left: 25%;
+            width: 2px;
+            height: 10px;
+            background: #888;
+        }
+
+        .playhead {
+            position: absolute;
+            top: 20px; /* Below the ruler */
+            left: calc(var(--track-info-width) + 21px);
+            width: 2px;
+            height: calc(100% - 20px);
+            background-color: white;
+            pointer-events: none;
+        }
+
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            background-color: #252525;
+            overflow-x: scroll;
+            position: relative;
+        }
+
+        .sample-browser {
+            width: var(--track-info-width);
+            background-color: #2c2c2c;
+            border-left: 1px solid #444;
+            overflow-y: auto;
+        }
+
+        .sample-browser ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .sample-browser ul li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .sample-browser ul li:hover {
+            background-color: #444;
+        }
+
+        .track {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            border-bottom: 1px solid #333;
+        }
+
+        .track-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: var(--track-info-width);
+            padding: 10px;
+            background-color: #333333;
+            border-right: 1px solid #444;
+        }
+
+        .track-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .track-controls button {
+            background: none;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .track-controls button:hover {
+            color: #00bcd4;
+        }
+
+        .track-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            background-color: #252525;
+        }
+
+        .placeholder {
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            font-size: 14px;
+            font-style: italic;
+            border: 1px dashed #444;
+        }
+
+        .clip {
+            background-color: #00bcd4;
+            height: 40px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .clip:hover {
+            background-color: #0097a7;
+        }
+
+        .plugin-editor {
+            height: 200px;
+            background-color: #2c2c2c;
+            border-top: 1px solid #444;
+            padding: 10px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="daw-container">
+        <!-- Top Menu Bar -->
+        <div class="menu-bar">
+            <div>
+                <button>File</button>
+                <button>View</button>
+                <button>Track</button>
+                <button>Help</button>
+            </div>
+            <div>
+                <button>Settings</button>
+                <span class="branding">WebDAW 1.0</span>
+            </div>
+        </div>
+
+        <!-- Transport Bar -->
+        <div class="transport-bar">
+            <div>
+                <button>&#9654;</button> <!-- Play Icon -->
+                <button>&#9632;</button> <!-- Stop Icon -->
+                <button>&#8635;</button> <!-- Loop Icon -->
+                <button>🎹</button> <!-- MIDI Input Icon -->
+            </div>
+            <div class="volume-slider">
+                <label for="master-volume">Master Volume:</label>
+                <input id="master-volume" type="range" min="0" max="100" value="50">
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-container">
+
+            <!-- Region Editor -->
+            <div class="region-editor-container">
+                <div class="ruler">
+                    <div class="beat">1<div class="quarter"></div></div>
+                    <div class="beat">2<div class="quarter"></div></div>
+                    <div class="beat">3<div class="quarter"></div></div>
+                    <div class="beat">4<div class="quarter"></div></div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="track">
+                        <div class="track-label">
+                            Track 1
+                            <div class="track-controls">
+                                <button>🔇</button> <!-- Mute Icon -->
+                                <button>🎵</button> <!-- Solo Icon -->
+                                <input id="volume-1" type="range" min="0" max="100" value="50"> <!-- Volume Slider -->
+                            </div>
+                        </div>
+                        <div class="track-content">
+                            <div class="clip" style="width: 100px;">Clip 1</div>
+                            <div class="clip" style="width: 200px;">Clip 2</div>
+                        </div>
+                    </div>
+                    <div class="track">
+                        <div class="track-label">
+                            Track 2
+                            <div class="track-controls">
+                                <button>🔇</button> <!-- Mute Icon -->
+                                <button>🎵</button> <!-- Solo Icon -->
+                                <input id="volume-2" type="range" min="0" max="100" value="50"> <!-- Volume Slider -->
+                            </div>
+                        </div>
+                        <div class="track-content">
+                            <div class="clip" style="width: 150px;">Clip A</div>
+                        </div>
+                    </div>
+                    <div class="track">
+                        <div class="track-label">
+                            Track 3
+                            <div class="track-controls">
+                                <button>🔇</button> <!-- Mute Icon -->
+                                <button>🎵</button> <!-- Solo Icon -->
+                                <input id="volume-3" type="range" min="0" max="100" value="50"> <!-- Volume Slider -->
+                            </div>
+                        </div>
+                        <div class="track-content">
+                            <div class="clip" style="width: 180px;">Clip X</div>
+                            <div class="clip" style="width: 120px;">Clip Y</div>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder for new tracks -->
+                    <div class="placeholder">Drag clips here to import them</div>
+                </div>
+                <div class="playhead"></div>
+                
+            </div>
+
+            <!-- Sample Browser -->
+            <div class="sample-browser">
+                <ul>
+                    <li>Sample 1</li>
+                    <li>Sample 2</li>
+                    <li>Sample 3</li>
+                    <li>Sample 4</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Plugin/Editor Section -->
+        <div class="plugin-editor">
+            <p>Plugin and Sample Editor</p>
+            <p>Details and parameters for the selected plugin or sample will appear here.</p>
+        </div>
+    </div>
+</body>
+</html>
